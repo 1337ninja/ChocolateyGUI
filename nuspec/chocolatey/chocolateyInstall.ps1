@@ -29,3 +29,13 @@ Update-SessionEnvironment
 
 # Process package parameters
 Set-UserSettings
+
+Write-Host "Migrating old logs if any.."
+$oldChocolateyDir = $env:ProgramData + "\ChocolateyGUI"
+$oldChocolateyLogsDir = $oldChocolateyDir + "\Logs"
+$newChocolateyLogsDir = $env:ProgramData + "\Chocolatey GUI\Archive Logs"
+if (Test-Path -Path $oldChocolateyLogsDir) {
+    Move-Item -Path $oldChocolateyLogsDir\* -Destination $newChocolateyLogsDir
+    Remove-Item $oldChocolateyDir -Recurse
+    Write-Host "Warning - Logs from a previous version are moved to $newChocolateyLogsDir. If you don't need them, fire up a Powershell and use Remove-Item to delete it"
+}
